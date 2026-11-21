@@ -1,0 +1,31 @@
+Caminho antigo;Nome novo
+1_packet_tracer;1 packet tracer
+1_packet_tracer/TCC_UPA_UBS.pkt;TCC UPA UBS.pkt
+2_configuracoes;2 configuracoes
+2_configuracoes/UPA-R_producao_sugerida_NAO_TESTADA.txt;UPA-R producao sugerida NAO TESTADA.txt
+3_capturas_de_tela;3 capturas de tela
+4_laboratorios_linux;4 laboratorios linux
+4_laboratorios_linux/analisa_lab.py;analisa-lab.py
+4_laboratorios_linux/analisa_testes.py;analisa-testes.py
+4_laboratorios_linux/dados/lab2_C1.csv;lab2-C1.csv
+4_laboratorios_linux/dados/lab2_C2.csv;lab2-C2.csv
+4_laboratorios_linux/dados/lab2_C3.csv;lab2-C3.csv
+4_laboratorios_linux/dados/lab2_C4.csv;lab2-C4.csv
+4_laboratorios_linux/dados/lab2_C5.csv;lab2-C5.csv
+4_laboratorios_linux/dados/lab2_MICRO.csv;lab2-MICRO.csv
+4_laboratorios_linux/dados/lab2_MICRO_ARPFIXO.csv;lab2-MICRO-ARPFIXO.csv
+4_laboratorios_linux/dados/lab2_QOS.csv;lab2-QOS.csv
+4_laboratorios_linux/dados/lab2_verif.json;lab2-verif.json
+4_laboratorios_linux/dados/lab2_verif_tunel.json;lab2-verif-tunel.json
+4_laboratorios_linux/dados/lab_C1a.csv;lab-C1a.csv
+4_laboratorios_linux/dados/lab_C1b.csv;lab-C1b.csv
+4_laboratorios_linux/dados/lab_C1c.csv;lab-C1c.csv
+4_laboratorios_linux/dados/lab_C1d.csv;lab-C1d.csv
+4_laboratorios_linux/dados/lab_C2.csv;lab-C2.csv
+4_laboratorios_linux/dados/lab_C3.csv;lab-C3.csv
+4_laboratorios_linux/dados/lab_C4.csv;lab-C4.csv
+4_laboratorios_linux/dados/lab_C5.csv;lab-C5.csv
+4_laboratorios_linux/dados/lab_QOS.csv;lab-QOS.csv
+4_laboratorios_linux/dados/pares_full.csv;pares-full.csv
+4_laboratorios_linux/laboratorio_1;laboratorio 1
+4_laboratorios_linux/laboratorio_2;laboratorio 2
