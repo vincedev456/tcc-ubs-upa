@@ -1,0 +1,27 @@
+{
+ "cifragem": {
+  "gre": 0,
+  "esp_total": 33,
+  "icmp_claro": 0
+ },
+ "sobrecarga": {
+  "carga_interna_ip": 1028,
+  "bytes_ip_externo_por_pacote": 1096.1,
+  "sobrecarga_bytes": 68.1
+ },
+ "mtu": {
+  "1372": 2,
+  "1373": 0,
+  "1380": 0,
+  "1400": 0,
+  "1420": 0,
+  "1472": 0
+ },
+ "dscp": {
+  "enviados_EF": 20,
+  "esp_com_EF": 20,
+  "enviados_AF31": 20,
+  "esp_com_AF31": 20
+ },
+ "rtt_ms": "rtt min/avg/max/mdev = 16.219/16.498/16.907/0.194 ms"
+}

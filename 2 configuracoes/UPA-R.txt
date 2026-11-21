@@ -1,0 +1,176 @@
+! ===================== UPA-R =====================
+enable
+configure terminal
+hostname UPA-R
+no ip domain-lookup
+enable secret Lab@Saude2026
+service password-encryption
+!
+! --- 1. Licenca de seguranca (responder yes ao contrato; depois: copy run start e reload) ---
+license boot module c2900 technology-package securityk9
+!
+! --- 2. LAN: router-on-a-stick ---
+interface GigabitEthernet0/0
+ description LAN-UPA
+ no shutdown
+interface GigabitEthernet0/0.10
+ description VLAN10-CLINICO
+ encapsulation dot1Q 10
+ ip address 10.1.10.1 255.255.255.0
+interface GigabitEthernet0/0.20
+ description VLAN20-ADMINISTRATIVO
+ encapsulation dot1Q 20
+ ip address 10.1.20.1 255.255.255.0
+interface GigabitEthernet0/0.30
+ description VLAN30-TELEMEDICINA
+ encapsulation dot1Q 30
+ ip address 10.1.30.1 255.255.255.0
+!
+! --- 3. WAN: dois ISPs (premissa: links de 100 Mbit/s) ---
+interface GigabitEthernet0/1
+ description ISP-A
+ bandwidth 100000
+ ip address 200.10.1.2 255.255.255.252
+ no shutdown
+interface GigabitEthernet0/2
+ description ISP-B
+ bandwidth 100000
+ ip address 200.20.1.2 255.255.255.252
+ no shutdown
+!
+! --- 4. Cada peer so e alcancado pelo proprio link ---
+ip route 200.10.2.2 255.255.255.255 200.10.1.1
+ip route 200.20.2.2 255.255.255.255 200.20.1.1
+!
+! --- 5. IPsec fase 1 (IKE); o Packet Tracer 9.0.1 oferece so os grupos DH 1, 2 e 5 ---
+crypto isakmp policy 10
+ encryption aes 256
+ hash sha
+ authentication pre-share
+ group 5
+ lifetime 86400
+crypto isakmp key UPA-UBS-LAB address 200.10.2.2
+crypto isakmp key UPA-UBS-LAB address 200.20.2.2
+!
+! --- 6. IPsec fase 2 e trafego protegido (GRE) ---
+crypto ipsec transform-set TS-SAUDE esp-aes 256 esp-sha-hmac
+ip access-list extended GRE-A
+ permit gre host 200.10.1.2 host 200.10.2.2
+ip access-list extended GRE-B
+ permit gre host 200.20.1.2 host 200.20.2.2
+crypto map CMAP-A 10 ipsec-isakmp
+ set peer 200.10.2.2
+ set transform-set TS-SAUDE
+ match address GRE-A
+crypto map CMAP-B 10 ipsec-isakmp
+ set peer 200.20.2.2
+ set transform-set TS-SAUDE
+ match address GRE-B
+interface GigabitEthernet0/1
+ crypto map CMAP-A
+interface GigabitEthernet0/2
+ crypto map CMAP-B
+!
+! --- 7. Tuneis GRE ---
+! Linhas com "!R" sao do projeto, recusadas pelo Packet Tracer 9.0.1;
+! em equipamento real, remover o "!R" (quadro de comandos recusados, cap. 6)
+interface Tunnel0
+!R description PRIMARIO-ISP-A
+ ip address 172.16.0.1 255.255.255.252
+!R ip mtu 1400
+!R ip tcp adjust-mss 1360
+ tunnel source GigabitEthernet0/1
+ tunnel destination 200.10.2.2
+!R ip ospf cost 10
+interface Tunnel1
+!R description BACKUP-ISP-B
+ ip address 172.16.0.5 255.255.255.252
+!R ip mtu 1400
+!R ip tcp adjust-mss 1360
+ tunnel source GigabitEthernet0/2
+ tunnel destination 200.20.2.2
+!R ip ospf cost 100
+!
+! --- 8. OSPF dentro dos tuneis ---
+router ospf 1
+ router-id 1.1.1.1
+ passive-interface GigabitEthernet0/0.10
+ passive-interface GigabitEthernet0/0.20
+ passive-interface GigabitEthernet0/0.30
+ network 10.1.10.0 0.0.0.255 area 0
+ network 10.1.20.0 0.0.0.255 area 0
+ network 10.1.30.0 0.0.0.255 area 0
+ network 172.16.0.0 0.0.0.3 area 0
+ network 172.16.0.4 0.0.0.3 area 0
+!
+! --- 9. Segmentacao: administrativo nao acessa o clinico ---
+ip access-list extended ADM-IN
+ deny ip 10.1.20.0 0.0.0.255 10.1.10.0 0.0.0.255
+ deny ip 10.1.20.0 0.0.0.255 10.2.10.0 0.0.0.255
+ permit ip any any
+interface GigabitEthernet0/0.20
+ ip access-group ADM-IN in
+!
+! --- 10. QoS: marcacao na entrada da LAN ---
+policy-map MARCA-VOZ
+ class class-default
+  set ip dscp ef
+policy-map MARCA-CLINICO
+ class class-default
+  set ip dscp af31
+interface GigabitEthernet0/0.30
+!R service-policy input MARCA-VOZ
+interface GigabitEthernet0/0.10
+!R service-policy input MARCA-CLINICO
+!
+! --- 11. QoS: filas na saida da WAN (classifica pelo DSCP copiado) ---
+! Em equipamento real, a FILA-WAN deve ir dentro de um shaper (SHAPE-WAN, Anexo J)
+class-map match-any VOZ
+ match ip dscp ef
+class-map match-any CLINICO
+ match ip dscp af31
+class-map match-any CONTROLE
+ match ip dscp cs6
+policy-map FILA-WAN
+ class VOZ
+  priority percent 20
+ class CLINICO
+  bandwidth percent 40
+ class CONTROLE
+  bandwidth percent 5
+interface GigabitEthernet0/1
+ service-policy output FILA-WAN
+interface GigabitEthernet0/2
+ service-policy output FILA-WAN
+!
+! --- 12. Endurecimento da WAN (aplicar por ultimo) ---
+ip access-list extended WAN-A-IN
+ permit udp host 200.10.2.2 host 200.10.1.2 eq isakmp
+ permit esp host 200.10.2.2 host 200.10.1.2
+ permit gre host 200.10.2.2 host 200.10.1.2
+ permit icmp any any
+ deny ip any any
+ip access-list extended WAN-B-IN
+ permit udp host 200.20.2.2 host 200.20.1.2 eq isakmp
+ permit esp host 200.20.2.2 host 200.20.1.2
+ permit gre host 200.20.2.2 host 200.20.1.2
+ permit icmp any any
+ deny ip any any
+interface GigabitEthernet0/1
+ ip access-group WAN-A-IN in
+interface GigabitEthernet0/2
+ ip access-group WAN-B-IN in
+!
+! --- 13. Temporizadores do OSPF nos tuneis (recusados pelo Packet Tracer) ---
+! Laboratorio: padrao (hello 10, dead 40), nada a configurar
+! Producao: alternativa ao BFD do Anexo J: hello 1, dead 3, nos dois tuneis
+! e nos DOIS roteadores:
+! interface Tunnel0
+!  ip ospf hello-interval 1
+!  ip ospf dead-interval 3
+! interface Tunnel1
+!  ip ospf hello-interval 1
+!  ip ospf dead-interval 3
+!
+end
+copy running-config startup-config

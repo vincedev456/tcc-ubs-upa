@@ -1,0 +1,118 @@
+! UPA-R - configuracao SUGERIDA para producao (IOS XE, ex.: Catalyst C8200L). NAO TESTADA.
+! Mostra apenas os blocos que mudam em relacao ao Anexo A. Interfaces ilustrativas:
+! Gi0/0/0 = LAN (trunk), Gi0/0/1 = ISP-A, Gi0/0/2 = ISP-B. Conferir nomes e sintaxe na versao comprada.
+! 1. IKEv2, grupo 19, SHA-256; IPsec por perfil no tunel (substitui as crypto maps e as ACLs GRE-A/GRE-B)
+crypto ikev2 proposal PROP-SAUDE
+ encryption aes-cbc-256
+ integrity sha256
+ group 19
+crypto ikev2 policy POL-SAUDE
+ proposal PROP-SAUDE
+crypto ikev2 keyring KR-SAUDE
+ peer UBS-A
+  address 200.10.2.2
+  pre-shared-key <CHAVE-LONGA-E-UNICA-POR-PAR>
+ peer UBS-B
+  address 200.20.2.2
+  pre-shared-key <CHAVE-LONGA-E-UNICA-POR-PAR>
+crypto ikev2 profile IKEV2-SAUDE
+ match identity remote address 200.10.2.2 255.255.255.255
+ match identity remote address 200.20.2.2 255.255.255.255
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local KR-SAUDE
+crypto ipsec transform-set TS-SAUDE esp-aes 256 esp-sha256-hmac
+ mode transport
+crypto ipsec profile IPSEC-SAUDE
+ set transform-set TS-SAUDE
+ set ikev2-profile IKEV2-SAUDE
+! janela anti-replay maior: a fila de prioridade pode reordenar pacotes ja cifrados
+crypto ipsec security-association replay window-size 1024
+! 2. Tuneis com custo, MTU, MSS e BFD de 300 ms x 3 (modo echo desligado no tunel)
+interface Tunnel0
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ ip ospf network point-to-point
+ ip ospf cost 10
+ bfd interval 300 min_rx 300 multiplier 3
+ no bfd echo
+ tunnel source GigabitEthernet0/0/1
+ tunnel destination 200.10.2.2
+ tunnel protection ipsec profile IPSEC-SAUDE
+interface Tunnel1
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ ip ospf network point-to-point
+ ip ospf cost 100
+ bfd interval 300 min_rx 300 multiplier 3
+ no bfd echo
+ tunnel source GigabitEthernet0/0/2
+ tunnel destination 200.20.2.2
+ tunnel protection ipsec profile IPSEC-SAUDE
+router ospf 1
+ bfd all-interfaces
+! 3. ACL da WAN sem GRE em claro e com ICMP restrito. Cria-se uma ACL nova e so depois
+!    ela substitui a antiga na interface, sem deixar a interface aberta. Repetir para o ISP-B.
+ip access-list extended WAN-A-IN-V2
+ permit udp host 200.10.2.2 host 200.10.1.2 eq isakmp
+ permit udp host 200.10.2.2 host 200.10.1.2 eq non500-isakmp
+ permit esp host 200.10.2.2 host 200.10.1.2
+ permit icmp any host 200.10.1.2 echo-reply
+ permit icmp any host 200.10.1.2 unreachable
+ permit icmp any host 200.10.1.2 time-exceeded
+ deny ip any any log
+interface GigabitEthernet0/0/1
+ ip access-group WAN-A-IN-V2 in
+! 4. VLAN 99 dedicada a gerencia (enderecos ilustrativos)
+interface GigabitEthernet0/0/0.99
+ description VLAN99-GERENCIA
+ encapsulation dot1Q 99
+ ip address 10.1.99.1 255.255.255.0
+! 5. Setor administrativo sem acesso as VLANs clinica, de voz, de gerencia e aos enderecos do roteador
+ip access-list extended ADM-IN-V2
+ deny ip 10.1.20.0 0.0.0.255 10.1.10.0 0.0.0.255
+ deny ip 10.1.20.0 0.0.0.255 10.2.10.0 0.0.0.255
+ deny ip 10.1.20.0 0.0.0.255 10.1.30.0 0.0.0.255
+ deny ip 10.1.20.0 0.0.0.255 10.2.30.0 0.0.0.255
+ deny ip 10.1.20.0 0.0.0.255 10.1.99.0 0.0.0.255
+ deny ip 10.1.20.0 0.0.0.255 172.16.0.0 0.0.0.7
+ permit ip any any
+interface GigabitEthernet0/0/0.20
+ ip access-group ADM-IN-V2 in
+! 6. Protecao tambem na saida das VLANs clinica e de voz, contra a VLAN administrativa remota
+ip access-list extended PROTEGE-CLINICO
+ deny ip 10.1.20.0 0.0.0.255 any
+ deny ip 10.2.20.0 0.0.0.255 any
+ permit ip any any
+interface GigabitEthernet0/0/0.10
+ ip access-group PROTEGE-CLINICO out
+interface GigabitEthernet0/0/0.30
+ ip access-group PROTEGE-CLINICO out
+! 7. Gerencia apenas por SSH, a partir da VLAN de gerencia, em todas as linhas VTY
+ip domain name upa.saude.local
+crypto key generate rsa modulus 3072
+ip ssh version 2
+ip access-list standard VTY-GERENCIA
+ permit 10.1.99.0 0.0.0.255
+line vty 0 15
+ access-class VTY-GERENCIA in
+ transport input ssh
+ login local
+username <USUARIO-NOMINAL> privilege 15 algorithm-type scrypt secret <SENHA-LONGA>
+! 8. Moldagem da saida abaixo da taxa contratada (100 Mbit/s): a fila se forma no roteador
+!    e a FILA-WAN (Anexo A, bloco 11) entra em acao. Substitui a FILA-WAN aplicada
+!    direto na interface. Repetir na interface do ISP-B.
+policy-map SHAPE-WAN
+ class class-default
+  shape average 95000000
+  service-policy FILA-WAN
+interface GigabitEthernet0/0/1
+ no service-policy output FILA-WAN
+ service-policy output SHAPE-WAN
+! 9. Relogio autenticado e registros (enderecos ilustrativos; conferir os algoritmos aceitos)
+ntp authentication-key 1 hmac-sha2-256 <CHAVE-NTP>
+ntp trusted-key 1
+ntp authenticate
+ntp server 10.1.99.20 key 1
+logging host 10.1.99.20
+service timestamps log datetime msec

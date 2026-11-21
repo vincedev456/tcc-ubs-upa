@@ -1,0 +1,32 @@
+! ===================== SW-UBS =====================
+enable
+configure terminal
+hostname SW-UBS
+vlan 10
+ name CLINICO
+vlan 20
+ name ADMINISTRATIVO
+vlan 30
+ name TELEMEDICINA
+interface FastEthernet0/1
+ description SERVIDOR-PRONTUARIO
+ switchport mode access
+ switchport access vlan 10
+interface FastEthernet0/2
+ description PC-CLINICO
+ switchport mode access
+ switchport access vlan 10
+interface FastEthernet0/3
+ description PC-ADMINISTRATIVO
+ switchport mode access
+ switchport access vlan 20
+interface FastEthernet0/4
+ description PC-TELEMEDICINA
+ switchport mode access
+ switchport access vlan 30
+interface GigabitEthernet0/1
+ description TRUNK-ROTEADOR
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30
+end
+copy running-config startup-config

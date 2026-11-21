@@ -1,0 +1,9 @@
+474f9eb9ec59a1754e561337a3d3cd259ebd365d22f2b1f08dabfb12f850c4eb  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-C1.csv
+e12b5a37c4dd0ca18d089723a87248917660028b8062ffa44bf3414f6fb960ba  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-C2.csv
+d8d2ad48813919aecce0119383b8fd4cba160f3fa5dfaf376a71c19b1b2e8af9  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-C3.csv
+f51606b7cb1739cbe068d11e1b2dacc4206a4efd523e4e93735f68d996792898  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-C4.csv
+b1cfbe97111f5a6079fc583c76d105b2984ccb324699e0a19efec07bac657449  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-C5.csv
+d2164ba0080424ec39876127bd665d1cf1d92bdaa9c2cf1639d45af475cd0699  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-MICRO.csv
+d7cf1636cb1253ba4ba24d0ab5bd16648c1134ea61c8c684201eaa3fabb49ab6  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-QOS.csv
+f33f89c209b96501acc098a5963537d2c13499b3c16c000793e47a61f4a22a91  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-verif-tunel.json
+f8cac8564272377ba439f9a6c11e68bab6fa0373c81be0da78454f442f5c7c2b  /home/vicen/tcc/resultados-lab2-2026-11-16_0832/dados2/lab2-verif.json

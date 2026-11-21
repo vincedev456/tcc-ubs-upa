@@ -1,0 +1,13 @@
+e65954d3a4c574e318a6e56e1513d1679fb2837db80aa817124985a6ff932592  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-C1a.csv
+e8b7ba29011b8994827e10cf2dea72505ecc3ed8bba9f7ac13070016f15c89a9  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-C1b.csv
+3e3b243b951773691c99e670358cd1939011cac6f414bdeff374484a476307d4  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-C1c.csv
+1e93660efccd3f5347d77b894d10b266a1742db86cd16502fb822137c4e2fe33  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-C1d.csv
+09c91076ef44b063a34868ff7037b7205c73d1db5387dbb69e406b064a2d659b  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-C2.csv
+c8ef6ef57131ed0a8058cf15e6283c365f5ac1a780e1efda13b4245a41274758  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-C3.csv
+16df4ed8de03eef0872d74c2b91f2319be4e2e083c02e8cd15f3b9a17b6b8af8  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-C4.csv
+50b6a35a5bbf79bead80ddd471de1726bc5fd1af4419c2ac9a6a2338d22e372b  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-C5.csv
+7ff424f03dbc7b0cf07f76fc80a02a58d5d69d36d4201d9ce635c5630a63faa6  /home/vicen/tcc/resultados-2026-11-16_0139/dados/lab-QOS.csv
+1445bc47932be9a98c863d1d23ff1db143156f06b5b415921b27571ce93c9532  /home/vicen/tcc/resultados-2026-11-16_0139/dados2/lab2-MICRO.csv
+205f450a2f649ba4989733022cc7ea09e6289a46d591f086dd3c34d853b193c6  /home/vicen/tcc/resultados-2026-11-16_0139/dados2/lab2-QOS.csv
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/vicen/tcc/resultados-2026-11-16_0139/dados2/lab2-verif-tunel.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/vicen/tcc/resultados-2026-11-16_0139/dados2/lab2-verif.json
