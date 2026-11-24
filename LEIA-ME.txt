@@ -12,7 +12,7 @@ Pastas com espaço no nome devem ir entre aspas no terminal, ex.: cd "4 laborato
 
 2 configuracoes/
   UPA-R.txt, UBS-R.txt   roteadores de borda (Anexos A e B)
-  ISP-A.txt, ISP-B.txt   roteadores que representam os ISPs (Anexo C)
+  ISP-A.txt, ISP-B.txt   roteadores que representam as operadoras (Anexo C)
   SW-UPA.txt, SW-UBS.txt switches (Anexo C)
   UPA-R producao sugerida NAO TESTADA.txt   versão sugerida para produção (Anexo J), não testada
   As linhas iniciadas por !R são do projeto e foram recusadas pelo Packet Tracer 9.0.1.
@@ -25,42 +25,40 @@ Pastas com espaço no nome devem ir entre aspas no terminal, ex.: cd "4 laborato
   Os dados dos laboratórios Linux vêm da execução de 16/11/2026 no computador do autor (DESKTOP-AJ7MPH0):
   WSL2 com Ubuntu 24.04.5 LTS, kernel 6.18.54.1-microsoft-standard-WSL2, pacote frr 8.4.4 da distribuição,
   execução com superusuário (root) pelo rodar_tudo.sh. Ambiente e somas SHA-256 em execucao-local/.
-  dados/                 CSV e JSON (16 CSV e 2 JSON da execução local + 3 CSV do Packet Tracer)
+  dados/
       execucoes.csv, deteccao.csv, pares-full.csv   Packet Tracer (Anexo E)
       lab-C*.csv, lab-QOS.csv                       laboratório Linux 1 (sem túnel)
       lab2-C*.csv, lab2-QOS.csv                     laboratório Linux 2 (túnel GRE sobre ESP)
       lab2-verif.json, lab2-verif-tunel.json        cifragem, MTU, sobrecarga e marcação
       lab2-MICRO.csv                                interrupções curtas
-  dados-bateria-anterior/
-      lab2-MICRO-ARPFIXO.csv   série com vizinhos ARP fixos, da bateria anterior (Ubuntu 22.04, kernel 6.8);
-                               não foi repetida na execução local e é citada assim na seção 7.9
-  execucao-local/        ambiente-lab1.txt, ambiente-lab2.txt (gravados pelo rodar_tudo.sh),
-                         integridade-sha256-lab1.txt, integridade-sha256-lab2.txt, relatorio-lab2.txt
-  rodar_tudo.sh          executa tudo de ponta a ponta (Ubuntu com root real; kernel com GRE, ESP, netem, htb):
+      lab2-MICRO-ARPFIXO.csv                        interrupções curtas com vizinhos ARP fixos
+  execucao-local/        ambiente, somas SHA-256 e relatório gravados pelo rodar_tudo.sh (ver NOTA-INTEGRIDADE.txt)
+  rodar_tudo.sh          executa tudo de ponta a ponta (Linux com root real; kernel com GRE, ESP, netem e htb):
                              sudo apt install frr iperf3 iproute2 python3-scipy
                              sudo bash rodar_tudo.sh 5              (os dois laboratórios)
                              sudo SO_LAB2=1 bash rodar_tudo.sh 5    (só o laboratório 2)
+                             sudo SO_ARP=1 bash rodar_tudo.sh       (só a série com vizinhos ARP fixos)
                          Valida dependências e kernel, faz um teste prévio de cada laboratório e grava
-                         resultados-AAAA-MM-DD_HHMM/ com os CSV, o ambiente, as somas SHA-256 e o relatório.
+                         resultados-.../ com os CSV, o ambiente, as somas SHA-256 e o relatório.
   analisa-testes.py      análise do Packet Tracer:  python3 analisa-testes.py --dados dados
-                         (critério de H3 da seção 4.2 e TOST do Quadro 28)
+                         (critério de H3 da seção 4.2 e TOST do Quadro 29)
   analisa-lab.py         análise dos laboratórios:  python3 analisa-lab.py --dados dados --pref lab-
                                                     python3 analisa-lab.py --dados dados --pref lab2-
   "laboratorio 1"/         lab.py, bateria.py, qos.py
       Requisitos: Linux com superusuário, iproute2, frr 8.4.4, iperf3, iputils-ping, python3-scipy.
-      Uma bateria:  python3 bateria.py C3 20 3 0
+      Uma bateria:  sudo python3 bateria.py C3 20 3 0
                     (configuração, falhas no caminho principal, falhas de controle, lado inicial)
-      Prioridade:   python3 qos.py 5
+      Prioridade:   sudo python3 qos.py 5
   "laboratorio 2"/         lab2.py, par.sh
-      Requisitos: kernel com GRE, ESP, netem e htb; iproute2; python3; frr 8.4.4. Com o pacote frr da
-      distribuição (como na execução local): FRR_LD="" FRR_BIN=/usr/lib/frr FRR_VTYSH=/usr/bin/vtysh
-      FRR_USER=frr; o rodar_tudo.sh já define essas variáveis.
-      Uma falha:          python3 lab2.py one C3 1 A UPA 1
-      Várias em paralelo: ./par.sh C3 1 A:UPA:1 A:UBS:2 B:UPA:3
-      Verificações:       python3 lab2.py verif      (ESP em modo transporte)
-                          python3 lab2.py veriftun   (ESP em modo túnel)
-      Prioridade:         python3 lab2.py qos1 1
-      Interrupções curtas: python3 lab2.py micro C5 1 50,100,150,200,250,300,350,400
+      Requisitos: Linux com superusuário; kernel com GRE, ESP, netem e htb; iproute2; python3; frr 8.4.4
+      (daemons em /usr/lib/frr, vtysh em /usr/bin/vtysh, executados como usuário frr).
+      Uma falha:          sudo python3 lab2.py one C3 1 A UPA 1
+      Várias em paralelo: sudo ./par.sh C3 1 A:UPA:1 A:UBS:2 B:UPA:3
+      Verificações:       sudo python3 lab2.py verif      (ESP em modo transporte)
+                          sudo python3 lab2.py veriftun   (ESP em modo túnel)
+      Prioridade:         sudo python3 lab2.py qos1 1
+      Interrupções curtas: sudo python3 lab2.py micro C5 1 50,100,150,200,250,300,350,400
+                          sudo ARP_FIXO=1 python3 lab2.py micro C3 1 1000,1500,2000,2500
       Consolidação:       python3 lab2.py consolida  (junta as parciais nos CSV que a análise lê)
       As chaves ESP do script são fixas e servem só ao laboratório.
 
