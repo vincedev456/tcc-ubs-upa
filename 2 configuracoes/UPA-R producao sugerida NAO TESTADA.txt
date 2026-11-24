@@ -116,3 +116,42 @@ ntp authenticate
 ntp server 10.1.99.20 key 1
 logging host 10.1.99.20
 service timestamps log datetime msec
+! 10. Tuneis cruzados (A-D e B-C), PFS e ACL de menor privilegio. SUGESTAO, NAO TESTADA.
+interface Tunnel2
+ description GRE-A-D (cruzado: ISP-A da UPA para ISP-B da UBS)
+ ip address 172.16.0.9 255.255.255.252
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ ip ospf network point-to-point
+ ip ospf cost 100
+ bfd interval 300 min_rx 300 multiplier 3
+ no bfd echo
+ tunnel source GigabitEthernet0/0/1
+ tunnel destination 200.20.2.2
+ tunnel protection ipsec profile IPSEC-SAUDE
+interface Tunnel3
+ description GRE-B-C (cruzado: ISP-B da UPA para ISP-A da UBS)
+ ip address 172.16.0.13 255.255.255.252
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ ip ospf network point-to-point
+ ip ospf cost 100
+ bfd interval 300 min_rx 300 multiplier 3
+ no bfd echo
+ tunnel source GigabitEthernet0/0/2
+ tunnel destination 200.10.2.2
+ tunnel protection ipsec profile IPSEC-SAUDE
+router ospf 1
+ network 172.16.0.8 0.0.0.3 area 0
+ network 172.16.0.12 0.0.0.3 area 0
+! PFS no perfil IPsec (ausente no simulador)
+crypto ipsec profile IPSEC-SAUDE
+ set pfs group19
+! ACL de menor privilegio na entrada dos tuneis (exemplo para a VLAN clinica; aplicar com ip access-group IN-TUNEL in)
+ip access-list extended IN-TUNEL
+ permit ospf any any
+ permit udp any any eq 3784
+ permit icmp any any echo
+ permit icmp any any echo-reply
+ permit ip 10.2.10.0 0.0.0.255 10.1.10.0 0.0.0.255
+ deny ip any any log
