@@ -1,13 +1,13 @@
 Arquivos gravados pelo rodar_tudo.sh no computador do autor (DESKTOP-AJ7MPH0), sem alteração.
 
 ambiente-lab1.txt / integridade-sha256-lab1.txt  - execução de 16/11/2026 01:39 (laboratório 1 completo).
-    Essa execução também tentou o laboratório 2, que falhou por erro de configuração do script (daemons do
-    FRR sem permissão) e foi descartada. Por isso o integridade-sha256-lab1.txt ainda lista lab2-MICRO.csv,
-    lab2-QOS.csv, lab2-verif.json e lab2-verif-tunel.json DAQUELA tentativa, que não estão neste pacote.
-ambiente-lab2.txt / integridade-sha256-lab2.txt / relatorio-lab2.txt - execução de 16/11/2026 08:32 a 09:09
-    (somente o laboratório 2, com SO_LAB2=1).
+    Essa execução também tentou o laboratório 2, que falhou por erro de configuração do script e foi
+    descartada; por isso o integridade-sha256-lab1.txt ainda lista arquivos lab2-* DAQUELA tentativa,
+    que não estão neste pacote.
+ambiente-lab2.txt / integridade-sha256-lab2.txt / relatorio-lab2.txt - execução de 2026-11-16 10:09
+    (laboratório 2 completo, com a série de vizinhos ARP fixos, executado com SO_LAB2=1 e o lab2.py deste pacote).
 
-Os 18 arquivos de dados da pasta dados/ que vêm dos laboratórios Linux (9 do laboratório 1 e 9 do
-laboratório 2) conferem com essas somas. Para verificar, dentro de "4 laboratorios linux" (deve imprimir 18 linhas "OK" e nenhuma falha):
+Os arquivos de dados da pasta dados/ que vêm dos laboratórios Linux (9 do laboratório 1 e 10 do
+laboratório 2) conferem com essas somas. Para verificar, dentro de "4 laboratorios linux":
     ( grep '/dados/lab-' execucao-local/integridade-sha256-lab1.txt; cat execucao-local/integridade-sha256-lab2.txt ) |
       while read h c; do echo "$h  dados/$(basename "$c")"; done | sha256sum -c

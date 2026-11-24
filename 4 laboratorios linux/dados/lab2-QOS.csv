@@ -1,21 +1,21 @@
 cenario,rep,sonda_dscp,media_ms,p95_ms,max_ms,perda_pct,vazao_mbps
-sem carga,1,0xb8,16.33,16.6,16.9,0.0,
-"carga, fila unica, sonda EF",1,0xb8,36.31,37.6,38.2,0.0,9.36
-"carga, FILA-WAN, sonda EF",1,0xb8,16.22,16.4,16.7,0.0,9.36
-"carga, FILA-WAN, sonda sem marca",1,0x00,36.23,37.0,37.5,0.0,9.36
-sem carga,2,0xb8,16.57,16.8,17.0,0.0,
-"carga, fila unica, sonda EF",2,0xb8,36.22,37.3,38.1,0.0,9.36
-"carga, FILA-WAN, sonda EF",2,0xb8,16.18,16.4,16.6,0.0,9.36
-"carga, FILA-WAN, sonda sem marca",2,0x00,36.4,37.7,37.9,0.0,9.36
-sem carga,3,0xb8,16.45,16.7,16.9,0.0,
-"carga, fila unica, sonda EF",3,0xb8,36.33,37.1,37.3,0.0,9.36
-"carga, FILA-WAN, sonda EF",3,0xb8,16.19,16.4,16.6,0.0,9.36
-"carga, FILA-WAN, sonda sem marca",3,0x00,36.39,37.5,37.7,0.0,9.36
-sem carga,4,0xb8,16.54,16.8,16.9,0.0,
-"carga, fila unica, sonda EF",4,0xb8,36.18,37.3,37.7,0.0,9.36
-"carga, FILA-WAN, sonda EF",4,0xb8,16.21,16.5,16.6,0.0,9.36
-"carga, FILA-WAN, sonda sem marca",4,0x00,36.22,37.2,37.8,0.0,9.36
-sem carga,5,0xb8,16.49,16.7,16.9,0.0,
-"carga, fila unica, sonda EF",5,0xb8,36.22,37.3,37.6,0.0,9.36
-"carga, FILA-WAN, sonda EF",5,0xb8,16.16,16.3,16.5,0.0,9.36
-"carga, FILA-WAN, sonda sem marca",5,0x00,36.29,37.1,37.5,0.0,9.36
+sem carga,1,0xb8,16.55,16.8,17.0,0.0,
+"carga, fila unica, sonda EF",1,0xb8,36.34,37.6,37.8,0.0,9.36
+"carga, FILA-WAN, sonda EF",1,0xb8,16.34,16.6,16.8,0.0,9.36
+"carga, FILA-WAN, sonda sem marca",1,0x00,36.43,37.7,37.9,0.0,9.36
+sem carga,2,0xb8,16.6,16.8,17.0,0.0,
+"carga, fila unica, sonda EF",2,0xb8,36.3,37.7,38.0,0.0,9.36
+"carga, FILA-WAN, sonda EF",2,0xb8,16.34,16.6,16.8,0.0,9.36
+"carga, FILA-WAN, sonda sem marca",2,0x00,36.36,37.6,38.0,0.0,9.36
+sem carga,3,0xb8,16.66,16.8,17.0,0.0,
+"carga, fila unica, sonda EF",3,0xb8,36.4,37.7,37.9,0.0,9.36
+"carga, FILA-WAN, sonda EF",3,0xb8,16.36,16.6,16.8,0.0,9.36
+"carga, FILA-WAN, sonda sem marca",3,0x00,36.42,37.7,38.0,0.0,9.36
+sem carga,4,0xb8,16.32,16.8,16.9,0.0,
+"carga, fila unica, sonda EF",4,0xb8,36.27,37.7,37.8,0.0,9.36
+"carga, FILA-WAN, sonda EF",4,0xb8,16.31,16.6,16.9,0.0,9.36
+"carga, FILA-WAN, sonda sem marca",4,0x00,36.31,37.7,37.9,0.0,9.36
+sem carga,5,0xb8,16.63,16.8,17.1,0.0,
+"carga, fila unica, sonda EF",5,0xb8,36.38,37.7,37.9,0.0,9.36
+"carga, FILA-WAN, sonda EF",5,0xb8,16.27,16.6,16.8,0.0,9.36
+"carga, FILA-WAN, sonda sem marca",5,0x00,36.51,37.8,38.0,0.0,9.36

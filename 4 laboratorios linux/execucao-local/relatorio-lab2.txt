@@ -43,33 +43,36 @@ Operadora B, lado UPA: n=5 media=1.0 dp=0.00 min=1 max=1
 
 ######## LAB 2 (tunel GRE sobre ESP)
 Interrupcao por configuracao (falhas do caminho principal), prefixo lab2-
-C1 OSPF 10/40: n=16 media=34.85 s dp=2.63 min=30.99 max=40.28 IC95=33.45 a 36.25 | faixa prevista 30 a 40 s: 15 de 16 sem tolerancia, 16 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 0 de 16 | retorno ao caminho principal, interrupcao maxima nao medido | controle (falha no caminho de reserva): 3 execucoes, max 0.006 s | Mann-Whitney por lado p=0.80
-    lado UPA: n=8 media=35.09 dp=3.05
-    lado UBS: n=8 media=34.62 dp=2.32
-C2 OSPF 5/20: n=14 media=18.94 s dp=1.78 min=16.00 max=21.50 IC95=17.91 a 19.96 | faixa prevista 15 a 20 s: 9 de 14 sem tolerancia, 12 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 0 de 14 | retorno ao caminho principal, interrupcao maxima nao medido | controle (falha no caminho de reserva): 3 execucoes, max 0.005 s | Mann-Whitney por lado p=0.71
-    lado UPA: n=7 media=18.64 dp=1.95
-    lado UBS: n=7 media=19.23 dp=1.68
-C3 OSPF 1/3: n=20 media=2.69 s dp=0.28 min=2.14 max=3.03 IC95=2.56 a 2.82 | faixa prevista 2 a 3 s: 18 de 20 sem tolerancia, 20 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 20 de 20 | retorno ao caminho principal, interrupcao maxima 0.01 s | controle (falha no caminho de reserva): 3 execucoes, max 0.005 s | Mann-Whitney por lado p=0.34
-    lado UPA: n=10 media=2.63 dp=0.30
-    lado UBS: n=10 media=2.74 dp=0.25
-C4 BFD 300 ms x 3: n=20 media=0.86 s dp=0.07 min=0.69 max=0.95 IC95=0.83 a 0.89 | faixa prevista 0.6 a 0.9 s: 14 de 20 sem tolerancia, 20 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 20 de 20 | retorno ao caminho principal, interrupcao maxima 0.02 s | controle (falha no caminho de reserva): 3 execucoes, max 0.005 s | Mann-Whitney por lado p=0.79
+C1 OSPF 10/40: n=16 media=35.81 s dp=2.96 min=31.81 max=40.69 IC95=34.23 a 37.38 | faixa prevista 30 a 40 s: 15 de 16 sem tolerancia, 16 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 0 de 16 | retorno ao caminho principal, interrupcao maxima nao medido | controle (falha no caminho de reserva): 3 execucoes, max 0.002 s | Mann-Whitney por lado p=0.04
+    lado UPA: n=8 media=37.31 dp=2.80
+    lado UBS: n=8 media=34.31 dp=2.39
+C2 OSPF 5/20: n=14 media=17.89 s dp=1.44 min=15.51 max=19.75 IC95=17.06 a 18.73 | faixa prevista 15 a 20 s: 14 de 14 sem tolerancia, 14 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 0 de 14 | retorno ao caminho principal, interrupcao maxima nao medido | controle (falha no caminho de reserva): 3 execucoes, max 0.002 s | Mann-Whitney por lado p=0.62
+    lado UPA: n=7 media=17.63 dp=1.44
+    lado UBS: n=7 media=18.16 dp=1.50
+C3 OSPF 1/3: n=20 media=2.54 s dp=0.26 min=2.11 max=2.96 IC95=2.41 a 2.66 | faixa prevista 2 a 3 s: 20 de 20 sem tolerancia, 20 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 20 de 20 | retorno ao caminho principal, interrupcao maxima 0.01 s | controle (falha no caminho de reserva): 3 execucoes, max 0.001 s | Mann-Whitney por lado p=0.47
+    lado UPA: n=10 media=2.58 dp=0.21
+    lado UBS: n=10 media=2.49 dp=0.31
+C4 BFD 300 ms x 3: n=20 media=0.84 s dp=0.06 min=0.72 max=0.94 IC95=0.82 a 0.87 | faixa prevista 0.6 a 0.9 s: 16 de 20 sem tolerancia, 20 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 20 de 20 | retorno ao caminho principal, interrupcao maxima 0.01 s | controle (falha no caminho de reserva): 3 execucoes, max 0.001 s | Mann-Whitney por lado p=0.24
     lado UPA: n=10 media=0.86 dp=0.07
-    lado UBS: n=10 media=0.86 dp=0.08
-C5 BFD 100 ms x 3: n=20 media=0.33 s dp=0.03 min=0.27 max=0.39 IC95=0.31 a 0.34 | faixa prevista 0.2 a 0.3 s: 3 de 20 sem tolerancia, 20 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 20 de 20 | retorno ao caminho principal, interrupcao maxima 0.03 s | controle (falha no caminho de reserva): 3 execucoes, max 0.004 s | Mann-Whitney por lado p=0.08
-    lado UPA: n=10 media=0.34 dp=0.03
-    lado UBS: n=10 media=0.32 dp=0.03
+    lado UBS: n=10 media=0.83 dp=0.05
+C5 BFD 100 ms x 3: n=20 media=0.32 s dp=0.03 min=0.26 max=0.39 IC95=0.30 a 0.33 | faixa prevista 0.2 a 0.3 s: 6 de 20 sem tolerancia, 20 com tolerancia, 0 abaixo do limite inferior | dentro da meta de 5 s: 20 de 20 | retorno ao caminho principal, interrupcao maxima 0.01 s | controle (falha no caminho de reserva): 3 execucoes, max 0.002 s | Mann-Whitney por lado p=0.31
+    lado UPA: n=10 media=0.31 dp=0.03
+    lado UBS: n=10 media=0.33 dp=0.03
 
 Microinterrupcoes no caminho principal: trocas de caminho / tentativas (previsto pelo modelo)
-C3 OSPF 1/3 500 ms: 0/4 (0.00) 1000 ms: 0/4 (0.00) 1500 ms: 2/4 (0.00) 2000 ms: 4/4 (0.00) 2500 ms: 4/4 (0.50) 3000 ms: 4/4 (1.00) | janela real 5.9 ms acima da nominal
-C4 BFD 300 ms x 3 300 ms: 0/4 (0.00) 400 ms: 0/4 (0.00) 500 ms: 0/4 (0.00) 600 ms: 2/4 (0.00) 700 ms: 4/4 (0.33) 800 ms: 4/4 (0.67) 900 ms: 4/4 (1.00) 1000 ms: 4/4 (1.00) | janela real 6.0 ms acima da nominal
-C5 BFD 100 ms x 3 50 ms: 0/4 (0.00) 100 ms: 0/4 (0.00) 150 ms: 0/4 (0.00) 200 ms: 2/4 (0.00) 250 ms: 4/4 (0.50) 300 ms: 4/4 (1.00) 350 ms: 4/4 (1.00) 400 ms: 4/4 (1.00) | janela real 5.8 ms acima da nominal
+C3 OSPF 1/3 500 ms: 0/4 (0.00) 1000 ms: 0/4 (0.00) 1500 ms: 2/4 (0.00) 2000 ms: 4/4 (0.00) 2500 ms: 4/4 (0.50) 3000 ms: 4/4 (1.00) | janela real 6.2 ms acima da nominal
+C4 BFD 300 ms x 3 300 ms: 0/4 (0.00) 400 ms: 0/4 (0.00) 500 ms: 0/4 (0.00) 600 ms: 1/4 (0.00) 700 ms: 3/4 (0.33) 800 ms: 4/4 (0.67) 900 ms: 4/4 (1.00) 1000 ms: 4/4 (1.00) | janela real 6.3 ms acima da nominal
+C5 BFD 100 ms x 3 50 ms: 0/4 (0.00) 100 ms: 0/4 (0.00) 150 ms: 0/4 (0.00) 200 ms: 0/4 (0.00) 250 ms: 2/4 (0.50) 300 ms: 4/4 (1.00) 350 ms: 4/4 (1.00) 400 ms: 4/4 (1.00) | janela real 6.0 ms acima da nominal
+
+Microinterrupcoes no caminho principal, vizinhos ARP fixos: trocas de caminho / tentativas (previsto pelo modelo)
+C3 OSPF 1/3 1000 ms: 0/4 (0.00) 1500 ms: 3/4 (0.00) 2000 ms: 3/4 (0.00) 2500 ms: 4/4 (0.50) | janela real 6.2 ms acima da nominal
 
 Prioridade de trafego (WAN de 10 Mbit/s)
-sem carga: n=5 RTT medio 16.48 ms, p95 16.7 ms, max 17.0 ms, perda 0.0%, vazao None Mbit/s
-carga, fila unica, sonda EF: n=5 RTT medio 36.25 ms, p95 37.3 ms, max 38.2 ms, perda 0.0%, vazao 9.36 Mbit/s
-carga, FILA-WAN, sonda EF: n=5 RTT medio 16.19 ms, p95 16.4 ms, max 16.7 ms, perda 0.0%, vazao 9.36 Mbit/s
-carga, FILA-WAN, sonda sem marca: n=5 RTT medio 36.31 ms, p95 37.3 ms, max 37.9 ms, perda 0.0%, vazao 9.36 Mbit/s
+sem carga: n=5 RTT medio 16.55 ms, p95 16.8 ms, max 17.1 ms, perda 0.0%, vazao None Mbit/s
+carga, fila unica, sonda EF: n=5 RTT medio 36.34 ms, p95 37.7 ms, max 38.0 ms, perda 0.0%, vazao 9.36 Mbit/s
+carga, FILA-WAN, sonda EF: n=5 RTT medio 16.32 ms, p95 16.6 ms, max 16.9 ms, perda 0.0%, vazao 9.36 Mbit/s
+carga, FILA-WAN, sonda sem marca: n=5 RTT medio 36.41 ms, p95 37.7 ms, max 38.0 ms, perda 0.0%, vazao 9.36 Mbit/s
 
 Hipoteses (criterios da secao 4.2)
 H6: 60 de 60 falhas com 1 s / 3 s e BFD em ate 5 s; 0 de 30 com 10 s / 40 s e 5 s / 20 s -> aceita
-H7: maior p95 da sonda EF com FILA-WAN sob carga = 16.50 ms em 5 repeticoes (limite 150 ms) -> aceita
+H7: maior p95 da sonda EF com FILA-WAN sob carga = 16.60 ms em 5 repeticoes (limite 150 ms) -> aceita

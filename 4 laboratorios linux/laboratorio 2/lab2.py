@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Laboratorio 2: GRE sobre ESP (IPsec em modo transporte, chaves fixas) + OSPF/BFD + atraso (netem) + QoS.
-Roda dentro de 'unshare -rnm'. Topologia: UPA-R e UBS-R, dois ISPs (pontes L2 com atraso), um tunel GRE
+Requer superusuario (root) e o pacote frr da distribuicao (8.4.4). Topologia: UPA-R e UBS-R, dois ISPs (pontes L2 com atraso), um tunel GRE
 protegido por ESP em cada caminho. OSPF e BFD rodam sobre as interfaces de tunel.
 
-Saidas (pasta $LABHOME/dados2, padrao ~/lab/dados2), ja com os nomes que analisa-lab.py consome (--pref lab2-):
+Saidas (pasta $LABHOME/dados2, padrao /tmp/tcc-lab2/dados2), ja com os nomes que analisa-lab.py consome (--pref lab2-):
   rec      -> lab2-<CFG><sufixo>.csv        (bateria sequencial completa)
   qos      -> lab2-QOS.csv
   one, qos1, micro gravam parciais em dados2/parciais/ (com cabecalho), e
@@ -16,12 +16,10 @@ Uso:
   python3 lab2.py consolida
 """
 import subprocess, sys, time, os, re, csv, glob, random, signal, statistics as st, json
-H = os.environ.get("LABHOME", os.path.expanduser("~/lab"))
-# FRR: por padrao o conjunto em $LABHOME/r (bin + lib); com o pacote frr da distribuicao (como root):
-#   FRR_LD="" FRR_BIN=/usr/lib/frr FRR_VTYSH=/usr/bin/vtysh
-LD = os.environ.get("FRR_LD", f"{H}/r/lib/ld-linux-x86-64.so.2 --library-path {H}/r/lib"); BIN = os.environ.get("FRR_BIN", f"{H}/r/bin")
-VTYSH = os.environ.get("FRR_VTYSH", f"{BIN}/vtysh")
-FRR_USER = os.environ.get("FRR_USER", "root")   # com o pacote frr da distribuicao use "frr" (o FRR recusa 'root' fora do grupo frrvty)
+H = os.environ.get("LABHOME", "/tmp/tcc-lab2")      # fora de /home e /root: os daemons rodam como usuario frr
+FRR = os.environ.get("FRR", "/usr/lib/frr")          # daemons do pacote frr
+VTYSH = os.environ.get("VTYSH", "/usr/bin/vtysh")
+FRR_USER = os.environ.get("FRR_USER", "frr")
 RUN = f"{H}/run"
 DADOS2 = f"{H}/dados2"; PARC = f"{DADOS2}/parciais"
 CAB_FALHA = ["config", "nome", "execucao", "caminho", "lado", "outage_s", "perdidos", "failback_s", "perdidos_fb"]
@@ -34,14 +32,6 @@ CENARIOS_QOS = (("sem carga", "fifo", False, "0xb8"), ("carga, fila unica, sonda
 
 def sh(c, **kw): return subprocess.run(c, shell=True, capture_output=True, text=True, **kw)
 def ns(n, c): return sh(f"ip netns exec {n} {c}")
-
-
-def prep():
-    if os.path.exists("/run/.prep"): return
-    sh("mount -t tmpfs tmpfs /run")
-    sh("cp /etc/group /run/g; echo 'frrvty:x:999:root' >> /run/g; echo 'frr:x:998:' >> /run/g; mount --bind /run/g /etc/group")
-    sh("cp -r /etc/pam.d /run/pamd; printf 'auth sufficient pam_permit.so\\naccount sufficient pam_permit.so\\n' > /run/pamd/frr; mount --bind /run/pamd /etc/pam.d")
-    sh("ip link set lo up"); open("/run/.prep", "w").write("1")
 
 
 CFGS = {
@@ -63,7 +53,6 @@ class Lab:
         s.tunnel = tunnel; s.esp = esp; s.tun_mtu = tun_mtu; s.esp_mode = esp_mode
 
     def build(s):
-        prep()
         for n in [s.upa, s.ubs, *s.isp.values()]:
             sh(f"ip netns add {n}"); ns(n, "ip link set lo up")
         s.ifs = {s.upa: {}, s.ubs: {}}
@@ -114,11 +103,11 @@ class Lab:
             nets = ["10.255.1.0/30", "10.255.2.0/30"] if s.tunnel else ["172.16.0.0/30", "172.16.0.4/30"]
             o += f"router ospf\n ospf router-id {rid}\n" + "".join(f" network {n} area 0\n" for n in nets) + f" network {lo} area 0\n"
             open(f"{d}/ospfd.conf", "w").write(o)
-            if FRR_USER != "root": sh(f"chown -R {FRR_USER}:{FRR_USER} {d}; chmod 777 {d}")
+            sh(f"chown -R {FRR_USER}:{FRR_USER} {d}; chmod 777 {d}")
             for x in ["zebra", "ospfd"] + (["bfdd"] if c["bfd"] else []):
-                ns(r, f"{LD} {BIN}/{x} -d -f {d}/{x}.conf -i {d}/{x}.pid -z {d}/z.api --vty_socket {d} -A 127.0.0.1 -u {FRR_USER} -g {FRR_USER}")
+                ns(r, f"{FRR}/{x} -d -f {d}/{x}.conf -i {d}/{x}.pid -z {d}/z.api --vty_socket {d} -A 127.0.0.1 -u {FRR_USER} -g {FRR_USER}")
 
-    def vty(s, r, cmd): return ns(r, f"{LD} {VTYSH} --vty_socket {s.dir}/{r} -c '{cmd}'").stdout
+    def vty(s, r, cmd): return ns(r, f"{VTYSH} --vty_socket {s.dir}/{r} -c '{cmd}'").stdout
     def nfull(s, r): return s.vty(r, "show ip ospf neighbor").count("Full")
 
     def via(s):

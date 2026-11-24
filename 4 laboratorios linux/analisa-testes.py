@@ -15,7 +15,7 @@ da hipotese H3 exatamente como na secao 4.2 do TCC (criterio formulado durante o
   (a) todos os tempos em [D-H, D], com tolerancia de 1 s pela resolucao das marcas de tempo, e
   (b) intervalo de confianca de 95% da media (t de Student) contendo a media prevista D-H/2.
 H3 so pode ser "nao rejeitada": compatibilidade, nao prova. Verificacoes complementares do
-Quadro 28 (fora do criterio de H3): teste t, Kolmogorov-Smirnov, bootstrap do desvio-padrao,
+Quadro 29 (fora do criterio de H3): teste t, Kolmogorov-Smirnov, bootstrap do desvio-padrao,
 Mann-Whitney e equivalencia (TOST, margens de 3 s e 2 s).
 
 Uso: python3 analisa-testes.py [--dados pasta] [--hello 10] [--dead 40]
